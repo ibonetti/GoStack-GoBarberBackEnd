@@ -32,9 +32,7 @@ class UserController {
     const schema = Yup.object().shape({
       name: Yup.string(),
       email: Yup.string().email(),
-      oldPassword: Yup.string()
-        .required()
-        .min(6),
+      oldPassword: Yup.string().min(6),
       password: Yup.string()
         .min(6)
         .when('oldPassword', (oldPassword, field) =>
@@ -64,7 +62,7 @@ class UserController {
     }
 
     if (oldPassword && !(await user.checkPassword(oldPassword))) {
-      res.status(401).json({ error: 'Password does not match ' });
+      return res.status(401).json({ error: 'Password does not match ' });
     }
 
     await user.update(req.body);
